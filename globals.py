@@ -5,8 +5,8 @@ import _thread
 GLOBALS = {
 	"Alarm": {
 		"Enabled": 1,
-		"Hour": 0,
-		"Minute": 6,
+		"Hour": 15,
+		"Minute": 0,
 		"DurationS": 300
 	},
 	"Time": {
@@ -79,6 +79,7 @@ def read_globals():
 
 def store_globals():
 	global GLOBALS
+	print("Storing globals.")
 	with open("globals_stored.json", "w") as globals_file:
 		globals_file.write(ujson.dumps(GLOBALS))
 
@@ -151,7 +152,7 @@ def index_for_key(the_list, list_name, the_key):
 	return -1
 
 """ Return a next-state with queue. Keys is in format [(category_key, value_key)] """
-def orchestrate_write_ui(keys):
+def orchestrate_write_ui(keys, withDirty=True):
 	if len(keys) == 0:
 		return ["idle"]
 
@@ -159,8 +160,9 @@ def orchestrate_write_ui(keys):
 	first_el = keys.pop(0)
 	keys.append(None) # type: ignore
 
-	return ["write", first_el[0], first_el[1], keys]
+	return ["write", first_el[0], first_el[1], keys, withDirty]
 
-def toggle_alarm(on):
+def toggle_alarm(on, withDirty=True):
 	GLOBALS["Alarm"]["Enabled"] = 1 if on else 0
-	GLOBALS_DIRTY["Dirty"] = True
+	if withDirty: # Disable dirty to prevent excessive writes damaging the flash
+		GLOBALS_DIRTY["Dirty"] = True

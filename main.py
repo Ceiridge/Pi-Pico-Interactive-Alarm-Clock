@@ -40,7 +40,7 @@ def init():
 		elif val_state == "read":
 			state_machine.transition_to(ReadState(val[1], val[2] if len(val) >= 3 else 0))
 		elif val_state == "write":
-			state_machine.transition_to(WriteState(val[1], val[2], val[3] if len(val) >= 4 else []))
+			state_machine.transition_to(WriteState(val[1], val[2], val[3] if len(val) >= 4 else [], val[4] if len(val) >= 5 else True))
 		elif val_state == "locked":
 			state_machine.transition_to(LockedState())
 		elif val_state == "alarm":

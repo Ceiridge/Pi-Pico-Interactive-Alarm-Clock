@@ -41,11 +41,13 @@ class WriteState(IterState):
 	our_value = 0
 	increment = 1
 	next_queue = []
+	set_dirty_flag = True
 
-	def __init__(self, category_key, index, next_queue=[]):
+	def __init__(self, category_key, index, next_queue=[], set_dirty_flag=True):
 		self.category_key = category_key
 		self.index = index
 		self.next_queue = next_queue
+		self.set_dirty_flag = set_dirty_flag 
 	
 	def enter(self, state_machine):
 		self.keys = globals.permutate_list(self.category_key, list(globals.GLOBALS[self.category_key].keys()))
@@ -93,7 +95,8 @@ class WriteState(IterState):
 		elif buttons[2]: # Fully write
 			globals.update_time()
 			globals.GLOBALS[self.category_key][self.keys[self.index]] = self.our_value
-			globals.GLOBALS_DIRTY["Dirty"] = True
+			if self.set_dirty_flag:
+				globals.GLOBALS_DIRTY["Dirty"] = True
 
 			try:
 				globals.apply_time()
@@ -107,7 +110,7 @@ class WriteState(IterState):
 				return ["read", self.category_key, self.index]
 			else:
 				queue_el = self.next_queue.pop(0)
-				return ["idle"] if queue_el == None else ["write", queue_el[0], queue_el[1], self.next_queue]
+				return ["idle"] if queue_el == None else ["write", queue_el[0], queue_el[1], self.next_queue, self.set_dirty_flag]
 		elif buttons[0]:
 			self.modify_by(-1)
 		elif buttons[1]:

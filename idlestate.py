@@ -53,12 +53,12 @@ class IdleState(State):
 	
 
 		if buttons[0] and buttons[1] and buttons[2]: # Toggle alarm
-			globals.toggle_alarm(not alarm_on)
+			globals.toggle_alarm(not alarm_on, withDirty=False)
 			return ["idle"]
 		elif buttons[0] and buttons[2]: # Set time
 			return globals.orchestrate_write_ui([("Time", "Year"), ("Time", "Month"), ("Time", "Day"), ("Time", "Hour"), ("Time", "Minutes"), ("Time", "Seconds")])
 		elif buttons[1] and buttons[2]: # Set alarm
-			return globals.orchestrate_write_ui([("Alarm", "Hour"), ("Alarm", "Minute")])
+			return globals.orchestrate_write_ui([("Alarm", "Hour"), ("Alarm", "Minute")], withDirty=False)
 		elif buttons[0] and buttons[1]: # Switch mode
 			return ["category"]
 		elif buttons[0] or buttons[1] or buttons[2]: # Light
