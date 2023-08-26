@@ -17,7 +17,7 @@ def init():
 	pull_mode = Pin.PULL_DOWN if (globals.GLOBALS["Fixed"]["BtnPullDown"] != 0) else Pin.PULL_UP
 	buttons = [Pin(globals.GLOBALS["Pins"][f"Btn{str(i)}"], Pin.IN, pull_mode) for i in range(3)]
 	
-	i2clcd = I2C(0, sda=Pin(globals.GLOBALS["Pins"]["LcdIsda"]), scl=Pin(globals.GLOBALS["Pins"]["LcdIscl"]), freq=globals.GLOBALS["Fixed"]["LcdIFreq"])
+	i2clcd = I2C(globals.GLOBALS["Pins"]["LcdIId"], sda=Pin(globals.GLOBALS["Pins"]["LcdIsda"]), scl=Pin(globals.GLOBALS["Pins"]["LcdIscl"]), freq=globals.GLOBALS["Fixed"]["LcdIFreq"])
 	lcd = I2cLcd(i2clcd, globals.GLOBALS["Pins"]["LcdIAddr"], globals.GLOBALS["Fixed"]["LcdIRows"], globals.GLOBALS["Fixed"]["LcdICols"])
 	lcd.backlight_on()
 	lcd.move_to(0, 0)

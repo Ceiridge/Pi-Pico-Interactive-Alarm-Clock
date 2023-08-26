@@ -1,6 +1,6 @@
 # Interactive Alarm Clock (Raspberry Pi Pico)
 
-<!-- TODO: Demo AVIF, I2C Identifier Global -->
+<!-- TODO: Demo AVIF -->
 
 A highly reliable, robust and customizable alarm clock that forces you to wake up and stay awake by making you solve a challenge at a fixed place to stop the alarm sound.
 
@@ -59,7 +59,7 @@ GP1: LCD I2C SCL
 1. Add the buzzer. Connect it with power line 1 (5V), its ground, and the data pin (see above).
 1. Add the LCD I2C. Also connect it with power line 1 (5V), its ground, and the data pins (see above).
 	1. You may need to scan the I2C address first. Flash an I2C scanner and set it in the globals file.
-1. Perform an [I2C address scan](https://www.freva.com/find-out-an-i2c-address-with-the-raspberry-pi-pico/) for the LCD. The address will need to be set in the globals file.
+1. Perform an [I2C address scan](https://www.freva.com/find-out-an-i2c-address-with-the-raspberry-pi-pico/) for the LCD. The address will need to be set in the globals file. You should also set `LcdIId` (I2C identifier, see online)
 1. Flash the interactive clock, making sure to adjust to the globals file.
 1. Put it in a box (e. g. cardboard) and print out the button guide if desired. Keep a hole for the buzzer for maximum volume.
 

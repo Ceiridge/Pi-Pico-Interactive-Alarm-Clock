@@ -4,7 +4,7 @@ import _thread
 
 GLOBALS = {
 	"Alarm": {
-		"Enabled": 1,
+		"Enabled": 0,
 		"Hour": 15,
 		"Minute": 0,
 		"DurationS": 300
@@ -24,6 +24,7 @@ GLOBALS = {
 	},
 	"Pins": {
 		"LcdIAddr": 0x27,
+		"LcdIId": 0,
 		"LcdIsda": 0,
 		"LcdIscl": 1,
 		"Btn0": 28,
