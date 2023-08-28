@@ -7,33 +7,25 @@ import utime
 buzzer_pwm = None
 multithreaded = True # For debug purposes
 
-def start_buzzing(loud=True):
+def start_buzzing(with_pwm=True):
 	global buzzer_pwm
 	stop_buzzing()
 
-	buzzer_pwm = PWM(Pin(globals.GLOBALS["Pins"]["BuzzerData"], Pin.OUT))
-	buzzer_pwm.freq(globals.GLOBALS["Buzzer"]["Frequency"])
-	if loud:
-		resume_buzzing()
-	else:
-		pause_buzzing()
-
-def resume_buzzing():
-	global buzzer_pwm
-	if buzzer_pwm != None:
+	if with_pwm:
+		buzzer_pwm = PWM(Pin(globals.GLOBALS["Pins"]["BuzzerData"], Pin.OUT))
+		buzzer_pwm.freq(globals.GLOBALS["Buzzer"]["Frequency"])
 		buzzer_pwm.duty_u16(int(globals.GLOBALS["Buzzer"]["DutyCycle%"] * (1.0 / 100.0) * 65535.0))
-
-def pause_buzzing():
-	global buzzer_pwm 
-	if buzzer_pwm != None:
-		buzzer_pwm.duty_u16(0)
+	else:
+		buzzer_pin = Pin(globals.GLOBALS["Pins"]["BuzzerData"], Pin.OUT)
+		buzzer_pin.value(1)
 
 def stop_buzzing():
 	global buzzer_pwm 
 	if buzzer_pwm != None:
 		buzzer_pwm.deinit()
-		buzzer_pin = Pin(globals.GLOBALS["Pins"]["BuzzerData"], Pin.OUT)
-		buzzer_pin.value(0)
+		buzzer_pwm = None
+	buzzer_pin = Pin(globals.GLOBALS["Pins"]["BuzzerData"], Pin.OUT)
+	buzzer_pin.value(0)
 
 class BuzzerAlarm():
 	running = True
@@ -43,7 +35,7 @@ class BuzzerAlarm():
 		if multithreaded:
 			globals.GLOBAL_LOCKS["Thread"].acquire() # Only allow one thread
 			try:
-				_thread.start_new_thread(self.alarm_thread, (self, ))
+				_thread.start_new_thread(self.alarm_thread, ())
 			finally:
 				globals.GLOBAL_LOCKS["Thread"].release()
 		else:
@@ -64,8 +56,8 @@ class BuzzerAlarm():
 		globals.GLOBAL_LOCKS["Thread"].acquire() # Only allow one thread
 
 		try:
-			start_buzzing(loud=False)
 			unit = globals.GLOBALS["Buzzer"]["BeepUnitMs"]
+			with_pwm = globals.GLOBALS["Buzzer"]["UsePwm"]
 
 			while self.running:
 				# Buzz sound pattern: I-I-I-I---- (each character is one unit)
@@ -73,15 +65,17 @@ class BuzzerAlarm():
 					needs_cont = True
 
 					for _ in range(4):
-						resume_buzzing()
+						start_buzzing(with_pwm)
 						if self.aware_sleep(unit): break
-						pause_buzzing()
+						stop_buzzing()
 						if self.aware_sleep(unit): break
 					else:
 						needs_cont = False
 
 					if needs_cont: continue
 					if self.aware_sleep(unit * 3): continue
+				else:
+					stop_buzzing()
 
 			stop_buzzing()
 		finally:

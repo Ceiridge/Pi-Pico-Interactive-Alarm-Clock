@@ -5,7 +5,7 @@ import _thread
 GLOBALS = {
 	"Alarm": {
 		"Enabled": 0,
-		"Hour": 15,
+		"Hour": 0,
 		"Minute": 0,
 		"DurationS": 300
 	},
@@ -20,40 +20,41 @@ GLOBALS = {
 	"Buzzer": {
 		"Frequency": 1500,
 		"DutyCycle%": 50,
-		"BeepUnitMs": 100
+		"BeepUnitMs": 100,
+		"UsePwm": 1
 	},
-	"Pins": {
-		"LcdIAddr": 0x27,
+	"Pins": { # These do not correspond to the schematic shown in README
+		"LcdIAddr": 39,
 		"LcdIId": 0,
 		"LcdIsda": 0,
 		"LcdIscl": 1,
-		"Btn0": 28,
-		"Btn1": 27,
-		"Btn2": 26,
-		"BuzzerData": 9
+		"Btn0": 10,
+		"Btn1": 11,
+		"Btn2": 12,
+		"BuzzerData": 16
 	},
 	"Ui": {
-		"AlarmReps": 6,
-		"LockMinutes": 5,
-		"InputDelay": 200,
-		"BacklightMs": 5000,
+		"AlarmReps": 4,
+		"LockMinutes": 15,
+		"InputDelay": 300,
+		"BacklightMs": 10000,
 		"AlarmGraceMs": 2500
 	},
 	"Fixed": {
 		"LcdICols": 16,
 		"LcdIRows": 2,
 		"LcdIFreq": 400000,
-		"BtnPullDown": 1,
+		"BtnPullDown": 1
 	}
 }
 
 # Needs to be recalculated every time the globals definition is changed
 GLOBALS_PERMUTATIONS = {
-	"GLOBALS": [0, 4, 5, 2, 1, 3],
+	"GLOBALS": [0, 5, 4, 2, 1, 3],
 	"Alarm": [3, 0, 1, 2],
-	"Time": [0, 2, 4, 3, 5, 1],
-	"Buzzer": [2, 0, 1],
-	"Ui": [4, 0, 1, 2, 3]
+	"Time": [4, 2, 0, 3, 5, 1],
+	"Buzzer": [1, 0, 3, 2],
+	"Ui": [0, 3, 2, 1, 4]
 }
 
 RTC = machine.RTC()

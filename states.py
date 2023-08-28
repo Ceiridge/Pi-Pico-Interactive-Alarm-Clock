@@ -29,6 +29,7 @@ class StateMachine():
 	
 	def detect_buttons(self, sleep_ms=0):
 		pressed_buttons = [False] * len(self.buttons)
+		has_pressed_one = False
 		sleep_amount = 1 if (sleep_ms == 0) else sleep_ms
 
 		for _ in range(sleep_amount):
@@ -38,7 +39,10 @@ class StateMachine():
 			for btn_idx, btn in enumerate(self.buttons):
 				if btn.value() == 1: # Btn is high
 					pressed_buttons[btn_idx] = True
+					has_pressed_one = True
 		
+		# Delay when a button is pressed to prevent spillovers
+		if has_pressed_one: utime.sleep_ms(globals.GLOBALS["Ui"]["InputDelay"] // 2)
 		return pressed_buttons
 
 

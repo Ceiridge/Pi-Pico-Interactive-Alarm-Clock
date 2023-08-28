@@ -25,7 +25,7 @@ class AlarmState(State):
 		self.next_bitstring(state_machine.lcd)
 
 	def exit(self, state_machine):
-		globals.toggle_alarm(False) # Disable alarm after exiting
+		globals.toggle_alarm(False, withDirty=False) # Disable alarm after exiting
 		self.buzz.deinit()
 
 	def draw(self, state_machine, lcd):
