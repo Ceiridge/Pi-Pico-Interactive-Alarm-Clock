@@ -1,6 +1,6 @@
 # Interactive Alarm Clock (Raspberry Pi Pico)
 
-<!-- TODO: Demo AVIF -->
+![Basic UI Demo](.github/demo.avif)
 
 A highly reliable, robust and customizable alarm clock that forces you to wake up and stay awake by making you solve a challenge at a fixed place to stop the alarm sound.
 
